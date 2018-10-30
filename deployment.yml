@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: email-blackhole
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: email-blackhole
+    spec:
+      containers:
+      - image: instrumentisto/postfix:3.1.3
+        imagePullPolicy: Always
+        name: email-blackhole
+        ports:
+        - containerPort: 25
+        volumeMounts:
+        - name: email-blackhole-configs
+          mountPath: /etc/postfix/main.cf.d
+      # Load the configuration files for postfix
+      volumes:
+        - name: email-blackhole-configs
+          configMap:
+            name: email-blackhole-config
