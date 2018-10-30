@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: email-blackhole-config
+data:
+  custom.cf: |
+    # accept anyuser@anydomain
+    relay_domains = static:ALL
+
+    # throw it away
+    smtpd_end_of_data_restrictions = check_client_access static:discard
+
+    # safety net
+    default_transport = discard:silently    
